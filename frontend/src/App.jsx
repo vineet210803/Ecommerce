@@ -12,11 +12,13 @@ import Orders from "./pages/Orders";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Protectedroutes from "./routes/Protectedroutes";
+import Searchbar from "./components/Searchbar";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
+      <Searchbar/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
