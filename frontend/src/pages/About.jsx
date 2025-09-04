@@ -1,10 +1,11 @@
 import React from 'react'
+import Trending from '../components/swiper'
 
 const About = () => {
   return (
-    <div>
-      i am about
-    </div>
+    <>
+      <Trending/>
+    </>
   )
 }
 

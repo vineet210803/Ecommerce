@@ -6,6 +6,7 @@ import { useState } from "react";
 const Navbar = () => {
 
   const [visible, setVisible] = useState(false);
+  const [showSearchbar, setShowSearchbar] = useState(false)
 
   return (
     <div className="flex items-center justify-between py-5 font-medium px-15">
@@ -61,6 +62,7 @@ const Navbar = () => {
       </ul>
       <div className="flex items-center gap-6">
         <img src={assets.search_icon} className="w-4 cursor-pointer" alt="" />
+
         <div className="group relative">
           <img
             src={assets.profile_icon}
