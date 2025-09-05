@@ -20,6 +20,16 @@ const ShopContextProvider = (props) =>{
     setshowsearch,
   };
 
+//   const searchedProducts => (()=>{
+//       let newProducts = products.slice();
+//     if(search){
+//         newProducts= newProducts.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()));
+//     }else{
+//         null
+//     }
+//     setfilter
+//   })
+
 return (
     <ShopContext.Provider value={ShopContextData}>
         {props.children}

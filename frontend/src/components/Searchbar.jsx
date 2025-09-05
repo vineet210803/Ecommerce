@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Searchbar = () => {
-  const { search, setSearch, showsearch, setshowsearch } =
-    useContext(ShopContext);
+  const { search, setSearch, setshowsearch } = useContext(ShopContext);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.pathname.includes("collection")) {
@@ -16,17 +16,35 @@ const Searchbar = () => {
     }
   }, [location.pathname, setshowsearch]);
 
-  return showsearch ? (
+  const handleSearch = () => {
+    if (search.trim() !== "") {
+      navigate(`/collection/${search.trim()}`);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  return (
     <div className="bg-gray-50 text-center">
       <div className="inline-flex items-center justify-center border border-gray-400 px-5 py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyPress}
           className="flex-1 outline-none bg-inherit text-sm"
           type="text"
           placeholder="Search"
         />
-        <img className="w-4" src={assets.search_icon} alt="search" />
+        <img
+          className="w-4 cursor-pointer"
+          src={assets.search_icon}
+          alt="search"
+          onClick={handleSearch}
+        />
       </div>
       <img
         onClick={() => setshowsearch(false)}
@@ -35,7 +53,7 @@ const Searchbar = () => {
         alt="close"
       />
     </div>
-  ) : null;
+  );
 };
 
 export default Searchbar;
