@@ -4,7 +4,7 @@ import Trending from '../components/swiper'
 const About = () => {
   return (
     <>
-      <Trending/>
+      about
     </>
   )
 }

@@ -9,7 +9,16 @@ const ShopContextProvider = (props) =>{
     const [search, setSearch]= useState("");
     const [showsearch, setshowsearch]= useState(false);
 
-    const ShopContextData = {products, currency, delivery_fee, search, setSearch, showsearch, setshowsearch};
+
+    const ShopContextData = {
+    products,
+    currency,
+    delivery_fee,
+    search,
+    setSearch,
+    showsearch,
+    setshowsearch,
+  };
 
 return (
     <ShopContext.Provider value={ShopContextData}>
@@ -20,5 +29,3 @@ return (
 }
 
 export default ShopContextProvider;
-
-

@@ -5,7 +5,7 @@ import { assets, products } from "../assets/assets";
 import Product from "../components/Product";
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products, search, showsearch  } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterproducts, setfilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -30,6 +30,11 @@ const Collection = () => {
 
   const applyFilter = ()=>{
     let productsCopy = products.slice();
+
+    if(showsearch && search){
+      
+    }
+
     if(category.length>0){
       productsCopy= productsCopy.filter(item=> category.includes(item.category));
     }
