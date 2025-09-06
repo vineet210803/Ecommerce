@@ -11,7 +11,7 @@ const Collection = () => {
   const [subcategory, setSubcategory] = useState([]);
   const [sortType, setSortType] = useState("relevant");
   const [showFilter, setShowFilter] = useState(false);
-  const { query } = useParams(); // 🔥 get search term from URL
+  const { query } = useParams();
 
   // Toggle category filter
   const toggleCategory = (e) => {
@@ -37,7 +37,7 @@ const Collection = () => {
   const applyFilter = () => {
     let productsCopy = products.slice();
 
-    // 🔥 Apply search filter from URL param
+    //Apply search filter from URL param
     if (query) {
       productsCopy = productsCopy.filter((item) =>
         item.name.toLowerCase().includes(query.toLowerCase())

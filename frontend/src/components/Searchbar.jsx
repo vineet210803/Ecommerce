@@ -22,7 +22,7 @@ const Searchbar = () => {
     if (search.trim() !== "") {
       navigate(`/collection/${search.trim()}`);
     } else {
-      navigate(`/collection`); // if input empty → show all products
+      navigate(`/collection`);
     }
   };
 
