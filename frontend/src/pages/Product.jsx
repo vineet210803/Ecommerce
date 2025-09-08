@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
+import Relatedproduct from "../components/Relatedproduct";
 
 const Product = () => {
   const { productID } = useParams();
@@ -12,7 +13,7 @@ const Product = () => {
   const [activeTab, setActiveTab] = useState("description");
 
   const fetchProductdata = async () => {
-    products.map((item) => {
+   await products.map((item) => {
       if (item._id === productID) {
         setproductdata(item);
         setimage(item.image[0]);
@@ -147,7 +148,7 @@ const Product = () => {
           ) : (
             <div className="flex flex-col gap-4">
               <div className="border p-4 shadow-sm">
-                <p className="font-medium">John Doe ⭐⭐⭐⭐☆</p>
+                <p className="font-medium">John Doe ⭐⭐⭐⭐</p>
                 <p className="text-sm text-gray-600 mt-1">
                   Really loved the product, great quality and perfect fit.
                 </p>
@@ -159,7 +160,7 @@ const Product = () => {
                 </p>
               </div>
               <div className="border p-4 shadow-sm">
-                <p className="font-medium">Rahul Sharma ⭐⭐⭐⭐☆</p>
+                <p className="font-medium">Rahul Sharma ⭐⭐⭐</p>
                 <p className="text-sm text-gray-600 mt-1">
                   Product is good but delivery took a little longer.
                 </p>
@@ -169,9 +170,7 @@ const Product = () => {
         </div>
       </div>
       {/* ------------Related Products */}
-      <div>
-        
-      </div>
+      <Relatedproduct category={productdata.category} subcategory={productdata.subcategory}/>
     </div>
   ) : (
     <div className="opacity-0"></div>
