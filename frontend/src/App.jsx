@@ -13,10 +13,12 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Protectedroutes from "./routes/Protectedroutes";
 import Searchbar from "./components/Searchbar";
+import { ToastContainer, toast } from 'react-toastify';
 
 const App = () => {
   return (
     <BrowserRouter>
+    <ToastContainer/>
       <Navbar />
       <Searchbar/>
       <Routes>
