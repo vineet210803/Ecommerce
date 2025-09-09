@@ -48,10 +48,6 @@ const ShopContextProvider = (props) => {
 
     }
 
-    useEffect(() => {
-        console.log(cartItems);
-    }, [cartItems])
-
 
   const ShopContextData = {
     products,
@@ -62,7 +58,8 @@ const ShopContextProvider = (props) => {
     showsearch,
     setshowsearch,
     addToCart,
-    getCartCount
+    getCartCount,
+    cartItems
   };
 
   return (
