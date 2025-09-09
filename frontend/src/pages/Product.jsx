@@ -59,7 +59,9 @@ const Product = () => {
 
         {/* ---------- Right Product Details ---------- */}
         <div className="flex-1">
-          <h1 className="font-bold text-3xl text-gray-900">{productdata.name}</h1>
+          <h1 className="font-bold text-3xl text-gray-900">
+            {productdata.name}
+          </h1>
 
           {/* Rating */}
           <div className="flex items-center gap-1 mt-3">
@@ -150,21 +152,22 @@ const Product = () => {
         <div className="mt-6 text-gray-700 leading-relaxed">
           {activeTab === "description" ? (
             <p className="bg-gray-50 p-5 rounded-xl shadow-sm">
-              {productdata.description} <br /> <br />
-              ✨ This product is crafted with high-quality materials, designed
-              to provide durability and style. Perfect for daily wear and
-              available in multiple sizes.
+              {productdata.description} <br /> <br />✨ This product is crafted
+              with high-quality materials, designed to provide durability and
+              style. Perfect for daily wear and available in multiple sizes.
             </p>
           ) : (
             <div className="flex flex-col gap-4">
               {[
                 {
                   name: "John Doe ⭐⭐⭐⭐",
-                  review: "Really loved the product, great quality and perfect fit.",
+                  review:
+                    "Really loved the product, great quality and perfect fit.",
                 },
                 {
                   name: "Jane Smith ⭐⭐⭐⭐⭐",
-                  review: "Excellent material, value for money. Will buy again!",
+                  review:
+                    "Excellent material, value for money. Will buy again!",
                 },
                 {
                   name: "Rahul Sharma ⭐⭐⭐",
