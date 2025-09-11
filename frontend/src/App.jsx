@@ -17,7 +17,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
+    <>
     <ToastContainer/>
       <Navbar />
       <Searchbar/>
@@ -41,7 +42,8 @@ const App = () => {
         <Route path="/orders" element={<Orders />} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+      </>
+    // </BrowserRouter>
   );
 };
 
