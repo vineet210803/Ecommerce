@@ -8,10 +8,10 @@ const Title = ({text1, text2}) => {
         <p className="text-4xl brightness-50 ">{text2}</p>
         <div className="bg-gray-500 w-8 h-0.5"></div>
       </div>
-      <p className="w-[80vw] mx-auto text-center pt-5">
+      {/* <p className="w-[80vw] mx-auto text-center pt-5">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
         voluptate quidem nam. Saepe, dolor sed?
-      </p>
+      </p> */}
     </>
   ); 
 };
