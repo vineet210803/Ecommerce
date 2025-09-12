@@ -56,7 +56,6 @@ useEffect(() => {
                 <img onClick={()=>updateQuantity(item._id, item.size, 0)} className='w-4 cursor-pointer  mr-4 sm:w-5 ' src={assets.bin_icon} alt="" />
               </div>
             )
-
           })
         }
       </div>
