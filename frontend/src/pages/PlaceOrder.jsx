@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/assets";
+import { ShopContext } from "../context/ShopContext";
 
 const PlaceOrder = () => {
 
   const [method , setmethod] = useState('cod');
+  const {navigate} = useContext(ShopContext)
 
   return (
     <div className="flex flex-col sm:flex-row justify-between pt-5 px-6 sm:pt-14 min-h-[80vh] border-t gap-y-3 ">
@@ -90,7 +92,7 @@ const PlaceOrder = () => {
             </div>
           </div>
           <div className="w-full text-end mt-8 ">
-            <button className=" bg-black text-white p-2 px-4 cursor-pointer">PLACE ORDER</button>
+            <button onClick={()=>navigate('/orders')} className=" bg-black text-white p-2 px-4 cursor-pointer">PLACE ORDER</button>
           </div>
         </div>
 
