@@ -84,10 +84,10 @@ const singleProduct = async (req, res) => {
     const {productId} = req.body
     const product = await productModel.findById(productId)
     res.json({success: true, product})
+    // console.log(product)
     
   } catch (error) {
     res.json({success: false, message: error.message})
-    
   }
 
 };
