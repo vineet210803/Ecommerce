@@ -10,7 +10,7 @@ const addProduct = async (req, res) => {
       price,
       category,
       subCategory,
-      size,
+      sizes,
       bestseller,
     } = req.body;
 
@@ -34,7 +34,7 @@ const addProduct = async (req, res) => {
         image: imagesUrl,
         category,
         subCategory,
-        sizes: JSON.parse(size),
+        sizes: JSON.parse(sizes),
         bestseller: bestseller==="true"? true : false, 
         date: Date.now()
 
