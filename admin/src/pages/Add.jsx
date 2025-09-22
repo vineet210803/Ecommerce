@@ -305,7 +305,7 @@ const Add = ({ token }) => {
         <div className="pt-4 text-center">
           <button
             type="submit"
-            className="bg-black text-white px-8 py-2  font-semibold hover:bg-gray-900 transition"
+            className="bg-black cursor-pointer hover:scale-105 transition-all text-white px-8 py-2  font-semibold hover:bg-gray-900 "
           >
             Add
           </button>
