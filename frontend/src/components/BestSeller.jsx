@@ -9,7 +9,7 @@ const BestSeller = () => {
   useEffect(() => {
     const Bestsellerproducts = products.filter((item) => item.bestseller);
     setBestseller(Bestsellerproducts.slice(0, 5));
-  }, []);
+  }, [products]);
 
   return (
     <>
