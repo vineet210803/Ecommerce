@@ -95,7 +95,7 @@ const Navbar = () => {
                 <p className="cursor-pointer hover:text-[#c586a5]">
                   My Profile
                 </p>
-                <p className="cursor-pointer hover:text-[#c586a5]">Orders</p>
+                <p onClick={()=>navigate('/orders')} className="cursor-pointer hover:text-[#c586a5]">Orders</p>
                 {token ? (
                   <p
                     onClick={handleLogout}
