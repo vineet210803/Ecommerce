@@ -16,14 +16,14 @@ const loginUser = async (req, res) => {
 
     if (!user) {
       return res.json({ success: false, message: "User does not Exists" });
-    }
-    const isPassMatch = await bcrypt.compare(password, user.password);
-
-    if (isPassMatch) {
-      const token = createToken(user._id);
-      res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid Credentials" });
+      const isPassMatch = await bcrypt.compare(password, user.password);
+      if (isPassMatch) {
+        const token = createToken(user._id);
+        res.json({ success: true, token });
+      } else {
+        res.json({ success: false, message: "Invalid Credentials" });
+      }
     }
   } catch (error) {
     console.log(error);
@@ -70,20 +70,22 @@ const regUser = async (req, res) => {
 
 //route for admin login
 const adminLogin = async (req, res) => {
-
   try {
-    const {email, password} = req.body
-    if(email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD){
-      const token =jwt.sign(email+password, process.env.JWT_SECRET);
-      res.json({success: true, token})
-    }else{
-      res.json({success:false, message: "Invalid Credentials"})
+    const { email, password } = req.body;
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const token = jwt.sign(email + password, process.env.JWT_SECRET);
+      res.json({ success: true, token });
+    } else {
+      res.json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
     console.log(error);
-    
-      res.json({success: false, message: error.message})
-    }
+
+    res.json({ success: false, message: error.message });
+  }
 };
 
 export { loginUser, regUser, adminLogin };

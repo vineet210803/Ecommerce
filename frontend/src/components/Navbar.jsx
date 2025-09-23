@@ -1,12 +1,27 @@
 import React, { useContext } from "react";
 import { assets } from "../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, Navigate, NavLink } from "react-router-dom";
 import { useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { showsearch, setshowsearch, getCartCount } = useContext(ShopContext);
+  const {
+    showsearch,
+    setshowsearch,
+    getCartCount,
+    token,
+    setToken,
+    navigate,
+    setCartItems,
+  } = useContext(ShopContext);
+
+  const handleLogout = () => {
+    navigate("/login");
+    localStorage.removeItem("token");
+    setToken("");
+    setCartItems({});
+  };
 
   return (
     <div className="flex items-center justify-between py-5 font-medium px-15">
@@ -69,17 +84,27 @@ const Navbar = () => {
         />
 
         <div className="group relative">
-          <Link to=''><img
+          <img
             src={assets.profile_icon}
             className="w-4 cursor-pointer"
             alt=""
           />
-          </Link>
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 ">
             <div className="flex flex-col gap-2 w-30 py-3 px-5 bg-slate-200 text-gray-600 rounded ">
               <p className="cursor-pointer hover:text-[#c586a5]">My Profile</p>
               <p className="cursor-pointer hover:text-[#c586a5]">Orders</p>
-              <p className="cursor-pointer hover:text-[#c586a5]">Logout</p>
+              {token ? (
+                <p
+                  onClick={handleLogout}
+                  className="cursor-pointer hover:text-[#c586a5]"
+                >
+                  Logout
+                </p>
+              ) : (
+                <Link to="/login">
+                  <p className="cursor-pointer hover:text-[#c586a5]">Login</p>
+                </Link>
+              )}
             </div>
           </div>
         </div>

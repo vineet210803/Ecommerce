@@ -10,11 +10,13 @@ const ShopContextProvider = (props) => {
   const currency = "$";
   const delivery_fee = 10;
   const backendUrl = import.meta.env.VITE_BACKEND_URL
-    console.log("Backend URL:", backendUrl);
+    // console.log("Backend URL:", backendUrl);
   const [search, setSearch] = useState("");
   const [showsearch, setshowsearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  // const [products, setProducts]= useState()
+  const [token, setToken]=useState("");
   const navigate = useNavigate();
   
 
@@ -82,7 +84,7 @@ const ShopContextProvider = (props) => {
     const getProductsData=async()=>{
       try {
         const response = await axios.get(`${backendUrl}/api/product/list`);
-        console.log(response.data)
+        // console.log(response.data)
         if(response.data.success){
           setProducts(response.data.products)
         }else{
@@ -97,8 +99,14 @@ const ShopContextProvider = (props) => {
 
     useEffect(()=>{
       getProductsData() 
-      console.log(backendUrl)
+      // console.log(backendUrl)
     },[]);
+
+    useEffect(()=>{
+      if(!token && localStorage.getItem('token')){
+        setToken(localStorage.getItem('token'));
+      }
+    },[])
 
 
   const ShopContextData = {
@@ -112,10 +120,13 @@ const ShopContextProvider = (props) => {
     addToCart,
     getCartCount,
     cartItems,
+    setCartItems,
     updateQuantity,
     getCartAmount,
     navigate,
-    backendUrl
+    backendUrl,
+    setToken, 
+    token
   };
 
   return (
