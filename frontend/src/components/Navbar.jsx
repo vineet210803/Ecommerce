@@ -89,24 +89,28 @@ const Navbar = () => {
             className="w-4 cursor-pointer"
             alt=""
           />
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 ">
-            <div className="flex flex-col gap-2 w-30 py-3 px-5 bg-slate-200 text-gray-600 rounded ">
-              <p className="cursor-pointer hover:text-[#c586a5]">My Profile</p>
-              <p className="cursor-pointer hover:text-[#c586a5]">Orders</p>
-              {token ? (
-                <p
-                  onClick={handleLogout}
-                  className="cursor-pointer hover:text-[#c586a5]"
-                >
-                  Logout
+          {token && (
+            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 ">
+              <div className="flex flex-col gap-2 w-30 py-3 px-5 bg-slate-200 text-gray-600 rounded ">
+                <p className="cursor-pointer hover:text-[#c586a5]">
+                  My Profile
                 </p>
-              ) : (
-                <Link to="/login">
-                  <p className="cursor-pointer hover:text-[#c586a5]">Login</p>
-                </Link>
-              )}
+                <p className="cursor-pointer hover:text-[#c586a5]">Orders</p>
+                {token ? (
+                  <p
+                    onClick={handleLogout}
+                    className="cursor-pointer hover:text-[#c586a5]"
+                  >
+                    Logout
+                  </p>
+                ) : (
+                  <Link to="/login">
+                    <p className="cursor-pointer hover:text-[#c586a5]">Login</p>
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <Link to="/cart" className=" relative ">
           <img src={assets.cart_icon} className="w-4 min-w-4" alt="" />
