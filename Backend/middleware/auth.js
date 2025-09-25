@@ -8,7 +8,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id; // only send the id
+    req.userId = decoded.id;
     next();
   } catch (error) {
     console.log(error);
