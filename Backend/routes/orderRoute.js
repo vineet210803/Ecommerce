@@ -6,7 +6,7 @@ import authMiddleware from '../middleware/auth.js';
 const orderRouter = express.Router();
 
 // Admin features
-orderRouter.get('/list',adminAuth, allorder);
+orderRouter.post('/list',adminAuth, allorder);
 orderRouter.post('/updatestatus', adminAuth, updatestatus);
 
 // payment features
@@ -15,7 +15,7 @@ orderRouter.post('/placestripe', authMiddleware , placeorderStripe);
 orderRouter.post('/placerazorpay', authMiddleware , placeorderRazorpay);
 
 // user features
-orderRouter.get('/userorder', authMiddleware, userorder);
+orderRouter.post('/userorder', authMiddleware, userorder);
 
 
 
