@@ -9,7 +9,7 @@ const Orders = ({ token }) => {
 
   const fetchAllOrders = async () => {
     if (!token) {
-      console.log("NO token");
+      console.log("Not Login");
       return null;
     }
     try {

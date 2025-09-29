@@ -14,8 +14,6 @@ const Relatedproduct = ({category, subcategory}) => {
             let productscopy = products.slice();
             productscopy = productscopy.filter((item) => category === item.category);
             productscopy = productscopy.filter((item) => subcategory === item.subcategory);
-            
-            // console.log(productscopy.slice(0,10));
             setrelated(productscopy.slice(1,6));
 
         }

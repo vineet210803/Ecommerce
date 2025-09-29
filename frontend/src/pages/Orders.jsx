@@ -9,14 +9,12 @@ const Orders = () => {
   const { backendUrl, token, currency } = useContext(ShopContext);
 
 
-  // console.log(`token is:  ${token}`)
 
   const [orderData, setOrderData] = useState([]);
 
   const loadOrderData = async () => {
     try {
       if (!token) {
-        // console.log("No token")
         return null;
       }
       const response = await axios.post(
@@ -24,7 +22,6 @@ const Orders = () => {
         {},
         { headers: { token } }
       );
-      // console.log(response.data);
       if(response.data.success){
         let allOrdersItem  = []
         response.data.orders.map((order)=>{

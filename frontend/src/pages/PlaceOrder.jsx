@@ -58,7 +58,7 @@ const PlaceOrder = () => {
             setCartItems({});
           }
         } catch (error) {
-          console.log(error)
+          // console.log(error)
           toast.error(error)
         }
       },
@@ -86,7 +86,7 @@ const PlaceOrder = () => {
           }
         }
       }
-      console.log(orderItems);
+      // console.log(orderItems);
 
       let orderData = {
         address: formData,
@@ -104,7 +104,6 @@ const PlaceOrder = () => {
             orderData,
             { headers: { token } }
           );
-          // console.log(response.data.success)
           if (response.data.success) {
             setCartItems({});
             navigate("/orders");
