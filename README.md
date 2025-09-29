@@ -1,4 +1,4 @@
-# 🛒 Ecommerce Website (In Progress)
+# 🛒 Ecommerce Website
 
 This repository contains the source code for an **Ecommerce web application** built using modern web technologies. The project is currently under active development and aims to provide a seamless shopping experience with features like product listings, cart management, authentication, and secure checkout.
 
