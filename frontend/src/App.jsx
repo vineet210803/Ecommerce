@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Protectedroutes from "./routes/Protectedroutes";
 import Searchbar from "./components/Searchbar";
 import { ToastContainer, toast } from 'react-toastify';
+import Verify from "./pages/Verify";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/product/:productID" element={<Product />} />
+        <Route path="/verify" element={<Verify />} />
         <Route
           path="/cart"
           element={
