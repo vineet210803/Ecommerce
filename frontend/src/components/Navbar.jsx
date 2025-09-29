@@ -84,34 +84,48 @@ const Navbar = () => {
         />
 
         <div className="group relative">
-          <img
-            src={assets.profile_icon}
-            className="w-4 cursor-pointer"
-            alt=""
-          />
-          {token && (
-            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4 ">
-              <div className="flex flex-col gap-2 w-30 py-3 px-5 bg-slate-200 text-gray-600 rounded ">
-                <p onClick={()=>navigate('/profile')} className="cursor-pointer hover:text-[#c586a5]">
-                  My Profile
-                </p>
-                <p onClick={()=>navigate('/orders')} className="cursor-pointer hover:text-[#c586a5]">Orders</p>
-                {token ? (
+          {token ? (
+            // When user is logged in
+            <>
+              <img
+                src={assets.profile_icon}
+                className="w-4 cursor-pointer"
+                alt="Profile"
+              />
+              <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+                <div className="flex flex-col gap-2 w-30 py-3 px-5 bg-slate-200 text-gray-600 rounded">
+                  <p
+                    onClick={() => navigate("/profile")}
+                    className="cursor-pointer hover:text-[#c586a5]"
+                  >
+                    My Profile
+                  </p>
+                  <p
+                    onClick={() => navigate("/orders")}
+                    className="cursor-pointer hover:text-[#c586a5]"
+                  >
+                    Orders
+                  </p>
                   <p
                     onClick={handleLogout}
                     className="cursor-pointer hover:text-[#c586a5]"
                   >
                     Logout
                   </p>
-                ) : (
-                  <Link to="/login">
-                    <p className="cursor-pointer hover:text-[#c586a5]">Login</p>
-                  </Link>
-                )}
+                </div>
               </div>
-            </div>
+            </>
+          ) : (
+            // When user is NOT logged in
+            <img
+              src={assets.profile_icon}
+              className="w-4 cursor-pointer"
+              alt="Login"
+              onClick={() => navigate("/login")}
+            />
           )}
         </div>
+
         <Link to="/cart" className=" relative ">
           <img src={assets.cart_icon} className="w-4 min-w-4" alt="" />
           <p className="absolute right-[-6px] bottom-[-6px] w-4 text-center bg-[#c586a5] rounded-full leading-4 aspect-square text-[8px]">
