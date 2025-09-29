@@ -14,10 +14,11 @@ const razorpayInstance = new razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Place order
+// Place order (COD)
 const placeorder = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const userId = req.userId;  // ✅ take from authMiddleware
+    const { items, amount, address } = req.body;
 
     const orderData = {
       userId,
@@ -44,8 +45,7 @@ const placeorder = async (req, res) => {
 // Get orders for a user
 const userorder = async (req, res) => {
   try {
-    const { userId } = req.body;
-    // console.log(userId)
+    const userId = req.userId;  // ✅ safe
     const orders = await orderModel.find({ userId });
     res.json({ success: true, orders });
   } catch (error) {
@@ -54,10 +54,13 @@ const userorder = async (req, res) => {
   }
 };
 
+// Stripe place order
 const placeorderStripe = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const userId = req.userId;  // ✅ safe
+    const { items, amount, address } = req.body;
     const { origin } = req.headers;
+
     const orderData = {
       userId,
       items,
@@ -74,19 +77,16 @@ const placeorderStripe = async (req, res) => {
     const line_items = items.map((item) => ({
       price_data: {
         currency: currency,
-        product_data: {
-          name: item.name,
-        },
+        product_data: { name: item.name },
         unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     }));
+
     line_items.push({
       price_data: {
         currency: currency,
-        product_data: {
-          name: "Delivery charges",
-        },
+        product_data: { name: "Delivery charges" },
         unit_amount: deliveryCharge * 100,
       },
       quantity: 1,
@@ -106,10 +106,12 @@ const placeorderStripe = async (req, res) => {
   }
 };
 
-// verify stripe
+// Stripe verify
 const verifyStripe = async (req, res) => {
-  const { orderId, success, userId } = req.body;
   try {
+    const userId = req.userId;  // ✅ safe
+    const { orderId, success } = req.body;
+
     if (success === "true") {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
       await userModel.findByIdAndUpdate(userId, { cartData: {} });
@@ -124,9 +126,12 @@ const verifyStripe = async (req, res) => {
   }
 };
 
+// Razorpay place order
 const placeorderRazorpay = async (req, res) => {
   try {
-    const { userId, items, amount, address } = req.body;
+    const userId = req.userId;  // ✅ safe
+    const { items, amount, address } = req.body;
+
     const orderData = {
       userId,
       items,
@@ -159,13 +164,16 @@ const placeorderRazorpay = async (req, res) => {
   }
 };
 
+// Razorpay verify
 const verifyRazorpay = async (req, res) => {
   try {
-    const { userId, razorpay_order_id } = req.body;
+    const userId = req.userId;  // ✅ safe
+    const { razorpay_order_id } = req.body;
+
     const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
     if (orderInfo.status === "paid") {
       await orderModel.findByIdAndUpdate(orderInfo.receipt, { payment: true });
-      await userModel.findByIdAndUpdate(userId, { cartdata: {} });
+      await userModel.findByIdAndUpdate(userId, { cartData: {} });
       res.json({ success: true, message: "Payment Successful!" });
     } else {
       res.json({ success: false, message: "Payment Failed, try Again!" });
@@ -176,6 +184,7 @@ const verifyRazorpay = async (req, res) => {
   }
 };
 
+// Admin: get all orders
 const allorder = async (req, res) => {
   try {
     const orders = await orderModel.find({});
@@ -185,12 +194,12 @@ const allorder = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+// Admin: update status
 const updatestatus = async (req, res) => {
   try {
     const { orderId, status } = req.body;
-
     await orderModel.findByIdAndUpdate(orderId, { status });
-
     res.json({ success: true, message: "Status Updated!" });
   } catch (error) {
     console.log(error);

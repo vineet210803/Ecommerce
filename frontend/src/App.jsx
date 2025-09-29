@@ -15,6 +15,7 @@ import Protectedroutes from "./routes/Protectedroutes";
 import Searchbar from "./components/Searchbar";
 import { ToastContainer, toast } from 'react-toastify';
 import Verify from "./pages/Verify";
+import Profile from "./pages/Profile"
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
          <Route path="/collection/:query" element={<Collection />} />
+         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/product/:productID" element={<Product />} />
