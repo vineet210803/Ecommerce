@@ -2,13 +2,13 @@ import jwt from "jsonwebtoken";
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const {token} = req.headers;
+    const { token } = req.headers;
     if (!token) {
       return res.json({ success: false, message: "Not Authorized. Login again" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.body.userId = decoded.id;
+    req.userId = decoded.id;   // ✅ store userId safely
     next();
   } catch (error) {
     console.log(error);

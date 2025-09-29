@@ -5,6 +5,7 @@ import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+// import razorpay from "razorpay";
 
 const PlaceOrder = () => {
   const [method, setmethod] = useState("cod");
@@ -39,6 +40,34 @@ const PlaceOrder = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const initPay = (order) => {
+    const options = {
+      key: import.meta.env.Vite_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Order Payment",
+      description: "Order Payment",
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response) => {
+        // console.log(response);
+        try {
+          const {data} = await axios.post(backendUrl+'/api/order/verifyrazorpay', response, {headers:{token}})
+          if(data.success){
+            navigate('/orders')
+            setCartItems({});
+          }
+        } catch (error) {
+          console.log(error)
+          toast.error(error)
+        }
+      },
+    }
+
+    const rzp = new window.Razorpay(options)
+    rzp.open()
+  };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -57,49 +86,68 @@ const PlaceOrder = () => {
           }
         }
       }
-      console.log(orderItems)
+      console.log(orderItems);
 
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee
+        amount: getCartAmount() + delivery_fee,
       };
 
       // console.log("Selected method:", method);
 
-
       switch (method) {
         // api calls for cod
         case "cod":
-          const response = await axios.post(backendUrl + '/api/order/placeorder', orderData, {headers: {token}})
+          const response = await axios.post(
+            backendUrl + "/api/order/placeorder",
+            orderData,
+            { headers: { token } }
+          );
           // console.log(response.data.success)
-          if(response.data.success){
-            setCartItems({})
-            navigate('/orders')
-          }
-          else{
-            toast.error(response.data.message)
-            toast.error("error")
+          if (response.data.success) {
+            setCartItems({});
+            navigate("/orders");
+          } else {
+            toast.error(response.data.message);
+            toast.error("error");
           }
           break;
 
-          case "stripe":
+        case "stripe":
+          const responseStripe = await axios.post(
+            backendUrl + "/api/order/placestripe",
+            orderData,
+            { headers: { token } }
+          );
 
-          const responseStripe = await axios.post(backendUrl+'/api/order/placestripe', orderData, {headers:{token}})
-
-          if(responseStripe.data.success){
-            const {session_url}= responseStripe.data
-            window.location.replace(session_url)
-          }else{
-            toast.error(responseStripe.data.message)
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message);
           }
+          break; 
+
+        case "razorpay":
+          const responseRazorpay = await axios.post(
+            backendUrl + "/api/order/placerazorpay",
+            orderData,
+            { headers: { token } }
+          );
+
+          if (responseRazorpay.data.success) {
+            initPay(responseRazorpay.data.order);
+          }
+
+          break;
 
         default:
           break;
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+      console.log(error);
+      toast.error(error.message);
       // toast.error("error")
     }
   };
@@ -223,7 +271,7 @@ const PlaceOrder = () => {
               ></p>
               <img className="h-5 mx-4 " src={assets.stripe_logo} alt="" />
             </div>
-            <div
+            <div 
               onClick={() => setmethod("razorpay")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
@@ -248,7 +296,7 @@ const PlaceOrder = () => {
           </div>
           <div className="w-full text-end mt-8 ">
             <button
-              type="Submit" 
+              type="Submit"
               className=" bg-black text-white p-2 px-4 cursor-pointer"
             >
               PLACE ORDER
