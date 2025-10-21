@@ -12,17 +12,34 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.78",
+    "@langchain/google-genai": "^0.2.18",
+    "@langchain/langgraph": "^0.4.9",
+    "@langchain/langgraph-checkpoint-mongodb": "^0.1.1",
+    "@langchain/mongodb": "^0.1.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "langchain": "^0.3.35",
+    "mongodb": "^6.20.0",
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
     "nodemon": "^3.1.10",
+    "openai": "^6.1.0",
     "razorpay": "^2.9.6",
     "stripe": "^18.5.0",
-    "validator": "^13.15.15"
+    "ts-node": "^10.9.2",
+    "validator": "^13.15.15",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.2",
+    "typescript": "^5.9.3"
   }
 }

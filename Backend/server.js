@@ -1,34 +1,42 @@
-import express from 'express'
-import cors from 'cors'
-import 'dotenv/config'
-import connectDB from './config/mongodb.js';
-import connectCloudinary from './config/cloudinary.js';
-import userRouter from './routes/userRoute.js';
-import productRouter from './routes/productRoute.js';
-import cartRouter from './routes/cartRoute.js';
-import orderRouter from './routes/orderRoute.js';
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import fetch from "node-fetch";
+import connectDB from "./config/mongodb.js";
+import connectCloudinary from "./config/cloudinary.js";
+import userRouter from "./routes/userRoute.js";
+import productRouter from "./routes/productRoute.js";
+import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
+import chatbotRouter from "./routes/chatbotRoute.js"; // ✅ new import
 
-// App config
-const app= express()
+const app = express();
 const port = process.env.PORT || 3000;
-connectDB()
-connectCloudinary()
 
-// middlewares
-app.use(express.json())
-app.use(cors())
+// Connect to DB & Cloudinary
+connectDB();
+connectCloudinary();
 
+// Middleware
+app.use(express.json());
 
-//api endpoints
-app.use('/api/user', userRouter)
-app.use('/api/product', productRouter)
-app.use('/api/cart', cartRouter)
-app.use('/api/order', orderRouter)
+// CORS setup
+const corsOptions = {
+  origin: "http://localhost:5173", // frontend URL
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
 
-app.get('/', (req, res)=>{
-   res.send ("api is working")
-})
+// API Routes
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/chatbot", chatbotRouter); // ✅ mount chatbot route
 
-app.listen(port, ()=>console.log('Server is listening on PORT: '+ port))
+// Root
+app.get("/", (req, res) => res.send("API is working"));
 
-
+// Start server
+app.listen(port, () => console.log(`✅ Server running on PORT: ${port}`));

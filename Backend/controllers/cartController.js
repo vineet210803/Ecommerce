@@ -32,7 +32,7 @@ const addToCart = async (req, res) => {
 const updateCart = async (req, res) => {
   try {
     const { itemId, size, quantity } = req.body;
-    const userId = req.userId;  // ✅
+    const userId = req.userId; 
 
     const userData = await userModel.findById(userId);
     let cartData = userData.cartData || {};
@@ -52,7 +52,7 @@ const updateCart = async (req, res) => {
 // ---------------- GET USER CART ---------------- //
 const getUserCart = async (req, res) => {
   try {
-    const userId = req.userId;   // ✅ clean
+    const userId = req.userId;
     const userData = await userModel.findById(userId);
     let cartData = userData?.cartData || {};
 
