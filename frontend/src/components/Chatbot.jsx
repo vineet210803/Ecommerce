@@ -13,7 +13,7 @@ function Chatbot() {
     setInput("");
 
     try {
-      const res = await fetch("http://localhost:3000/api/chatbot/chat", {
+      const res = await fetch("https://ecommerce-backend-silk-theta.vercel.app/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
