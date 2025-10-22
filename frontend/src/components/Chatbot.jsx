@@ -1,4 +1,3 @@
-// ---------- frontend/src/components/chatbot.jsx ----------
 import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,17 +7,23 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // ✅ Automatically select backend based on environment
-  // const isProduction = import.meta.env.MODE === "production";
-  const BACKEND_URL = "https://ecommerce-backend-silk-theta.vercel.app"
-    // : "http://localhost:3000";
-
+  
+  // ✅ FIX: Use a conditional check on process.env.NODE_ENV to avoid the 'import.meta' error.
+  // This automatically selects the deployed URL in production and localhost in development.
+  const isProduction = process.env.NODE_ENV === 'production';
+  const BACKEND_URL = isProduction 
+    ? "https://ecommerce-backend-silk-theta.vercel.app" 
+    : "http://localhost:3000";
+  
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll
-  useEffect(() => {
+  // Scroll to the latest message whenever messages update
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
   }, [messages]);
 
   const sendMessage = async (e) => {
@@ -36,25 +41,29 @@ function Chatbot() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
       });
+      
+      setLoading(false);
 
-      if (!res.ok) throw new Error(`Server returned status ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`Server returned status ${res.status}`);
+      }
+
       const data = await res.json();
-
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: data.reply || "⚠️ Bot error: No valid reply received." },
-      ]);
+      if (data.reply) {
+        setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { sender: "bot", text: "⚠️ Bot error: No valid reply received." },
+        ]);
+      }
     } catch (error) {
+      setLoading(false);
       console.error("Chatbot API Error:", error);
       setMessages((prev) => [
         ...prev,
-        {
-          sender: "bot",
-          text: "⚠️ Sorry, I couldn't connect to the backend server. Check the network and CORS configuration.",
-        },
+        { sender: "bot", text: "⚠️ Sorry, I couldn't connect to the backend server. Check the network and CORS configuration." },
       ]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -84,11 +93,10 @@ function Chatbot() {
           transition={{ duration: 0.2 }}
           className="fixed bottom-5 right-5 w-80 max-w-[90vw] bg-white shadow-2xl rounded-xl p-4 border border-gray-200 z-50 flex flex-col h-[400px]"
         >
-          {/* Header */}
           <div className="flex justify-between items-center pb-3 border-b mb-3">
             <h2 className="font-bold text-lg text-gray-800 flex items-center">
-              <MessageCircle size={20} className="mr-2 text-[#c586a5]" />
-              Shopping Assistant
+                <MessageCircle size={20} className="mr-2 text-[#c586a5]" />
+                Shopping Assistant
             </h2>
             <button
               onClick={() => setOpen(false)}
@@ -98,14 +106,12 @@ function Chatbot() {
             </button>
           </div>
 
-          {/* Chat messages */}
           <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
             {messages.length === 0 && (
-              <div className="text-center text-gray-400 mt-10 p-2 text-sm">
-                Hello! I'm your shopping assistant. How can I help you find the perfect product today?
-              </div>
+                <div className="text-center text-gray-400 mt-10 p-2 text-sm">
+                    Hello! I'm your shopping assistant. How can I help you find the perfect product today?
+                </div>
             )}
-
             {messages.map((msg, i) => (
               <div
                 key={i}
@@ -114,10 +120,10 @@ function Chatbot() {
                 }`}
               >
                 <motion.span
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className={`inline-block max-w-[80%] px-3 py-2 rounded-xl text-sm break-words ${
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className={`inline-block max-w-[80%] px-3 py-2 rounded-xl text-sm break-words ${
                     msg.sender === "user"
                       ? "bg-[#c586a5] text-white rounded-br-none shadow-md"
                       : "bg-gray-100 text-gray-800 rounded-tl-none shadow-sm"
@@ -127,18 +133,16 @@ function Chatbot() {
                 </motion.span>
               </div>
             ))}
-
             {loading && (
-              <div className="flex justify-start">
-                <span className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl rounded-tl-none text-sm animate-pulse">
-                  Typing...
-                </span>
-              </div>
+                <div className="flex justify-start">
+                    <span className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl rounded-tl-none text-sm animate-pulse">
+                        Typing...
+                    </span>
+                </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input field */}
           <form onSubmit={sendMessage} className="flex pt-3 border-t mt-3">
             <input
               className="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c586a5] transition"
