@@ -1,3 +1,4 @@
+// ---------- routes/chatbotRoute.js ----------
 import express from "express";
 import fetch from "node-fetch";
 
@@ -5,14 +6,17 @@ const router = express.Router();
 
 router.post("/chat", async (req, res) => {
   const { message } = req.body;
+
   const modelUrl = "https://router.huggingface.co/v1/chat/completions";
   const modelId = "deepseek-ai/DeepSeek-V3.2-Exp:novita";
+
   const systemPrompt =
     "You are a helpful Shopping assistant that helps users find the best items for their use and suggest products according to their needs.";
+
   const maxRetries = 3;
 
   if (!process.env.HF_API_KEY) {
-    console.error("HF_API_KEY not set in environment variables.");
+    console.error("❌ HF_API_KEY not set in environment variables.");
     return res.status(500).json({ error: "Server misconfiguration: API key missing." });
   }
 
@@ -41,9 +45,7 @@ router.post("/chat", async (req, res) => {
         if (response.status === 404 || response.status === 400) {
           return res.status(response.status).json(errorBody);
         }
-        throw new Error(
-          `API failed with status ${response.status}: ${JSON.stringify(errorBody)}`
-        );
+        throw new Error(`API failed with status ${response.status}: ${JSON.stringify(errorBody)}`);
       }
 
       const data = await response.json();
@@ -53,7 +55,7 @@ router.post("/chat", async (req, res) => {
 
       return res.json({ reply });
     } catch (err) {
-      console.error(`Attempt ${attempt + 1} failed:`, err.message);
+      console.error(`⚠️ Attempt ${attempt + 1} failed:`, err.message);
       if (attempt < maxRetries - 1) {
         const delay = Math.pow(2, attempt) * 1000;
         await new Promise((resolve) => setTimeout(resolve, delay));
