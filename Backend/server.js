@@ -14,18 +14,30 @@ import chatbotRouter from "./routes/chatbotRoute.js";
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ Connect to DB & Cloudinary
 connectDB();
 connectCloudinary();
 
-// Middleware
 app.use(express.json());
 
-// ✅ Allowlist for frontend origins
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ecommerce-frontend-two-phi.vercel.app"
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 
 
-// ✅ API Routes
+
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
