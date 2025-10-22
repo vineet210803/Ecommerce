@@ -22,29 +22,8 @@ connectCloudinary();
 app.use(express.json());
 
 // ✅ Allowlist for frontend origins
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://ecommerce-frontend-two-phi.vercel.app",
-];
+app.use(cors());
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // allow server-to-server or same-origin
-    if (allowedOrigins.some(o => origin.startsWith(o))) {
-      callback(null, true);
-    } else {
-      console.error(`❌ CORS blocked: ${origin}`);
-      callback(new Error(`CORS not allowed for ${origin}`), false);
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-app.use(cors(corsOptions));
-// ✅ Handle preflight requests
-app.options("*", cors(corsOptions));
 
 // ✅ API Routes
 app.use("/api/user", userRouter);

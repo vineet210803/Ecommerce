@@ -10,10 +10,9 @@ function Chatbot() {
   const [loading, setLoading] = useState(false);
 
   // ✅ Automatically select backend based on environment
-  const isProduction = import.meta.env.MODE === "production";
-  const BACKEND_URL = isProduction
-    ? "https://ecommerce-backend-silk-theta.vercel.app"
-    : "http://localhost:3000";
+  // const isProduction = import.meta.env.MODE === "production";
+  const BACKEND_URL = "https://ecommerce-backend-silk-theta.vercel.app"
+    // : "http://localhost:3000";
 
   const messagesEndRef = useRef(null);
 
