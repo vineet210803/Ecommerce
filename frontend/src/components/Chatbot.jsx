@@ -7,20 +7,30 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const [open, setOpen] = useState(false);
 
+  // ✅ Use your deployed backend URL
+  const BACKEND_URL = "https://ecommerce-backend-silk-theta.vercel.app";
+
   const sendMessage = async () => {
     if (!input.trim()) return;
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
     setInput("");
 
     try {
-      const res = await fetch("https://ecommerce-backend-silk-theta.vercel.app/api/chat", {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
 
       const data = await res.json();
-      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      if (data.reply) {
+        setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { sender: "bot", text: "⚠️ No response received from the bot." },
+        ]);
+      }
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -51,7 +61,10 @@ function Chatbot() {
         >
           <div className="flex justify-between items-center mb-3">
             <h2 className="font-semibold text-gray-700">Shopping Assistant</h2>
-            <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-gray-700">
+            <button
+              onClick={() => setOpen(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
               <X size={20} />
             </button>
           </div>
@@ -60,7 +73,9 @@ function Chatbot() {
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <span
                   className={`inline-block px-3 py-2 rounded-lg ${

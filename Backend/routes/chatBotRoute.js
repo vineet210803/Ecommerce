@@ -12,8 +12,10 @@ router.post("/chat", async (req, res) => {
   const maxRetries = 3;
 
   if (!process.env.HF_API_KEY) {
-    console.error("HF_API_KEY not set in environment variables.");
-    return res.status(500).json({ error: "Server misconfiguration: API key missing." });
+    console.error("HF_API_KEY missing in environment.");
+    return res
+      .status(500)
+      .json({ error: "Server misconfiguration: API key missing." });
   }
 
   const requestBody = {
@@ -37,19 +39,23 @@ router.post("/chat", async (req, res) => {
       });
 
       if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ error: "Unknown API error" }));
+        const errorBody = await response.json().catch(() => ({
+          error: "Unknown API error",
+        }));
         if (response.status === 404 || response.status === 400) {
           return res.status(response.status).json(errorBody);
         }
         throw new Error(
-          `API failed with status ${response.status}: ${JSON.stringify(errorBody)}`
+          `API failed with status ${response.status}: ${JSON.stringify(
+            errorBody
+          )}`
         );
       }
 
       const data = await response.json();
       const reply =
         data.choices?.[0]?.message?.content ||
-        "No valid response structure received from the model.";
+        "No valid response received from model.";
 
       return res.json({ reply });
     } catch (err) {
@@ -59,7 +65,8 @@ router.post("/chat", async (req, res) => {
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
         return res.status(500).json({
-          error: "Could not get a response from the LLM service after multiple attempts.",
+          error:
+            "Could not get a response from the LLM service after multiple attempts.",
         });
       }
     }
