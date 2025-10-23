@@ -25,17 +25,10 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
-
 
 
 app.use("/api/user", userRouter);
@@ -45,7 +38,7 @@ app.use("/api/order", orderRouter);
 app.use("/api/chatbot", chatbotRouter);
 
 // Root route
-app.get("/", (req, res) => res.send("✅ API is working and connected to chatbot."));
+app.get("/", (req, res) => res.send("✅ API is working."));
 
 // Start server
 app.listen(port, () => console.log(`✅ Server running on PORT: ${port}`));

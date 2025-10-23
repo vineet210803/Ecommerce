@@ -8,16 +8,12 @@ function Chatbot() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  // ✅ FIX: Use a conditional check on process.env.NODE_ENV to avoid the 'import.meta' error.
-  // This automatically selects the deployed URL in production and localhost in development.
-  const isProduction = process.env.NODE_ENV === 'production';
-  const BACKEND_URL = isProduction 
-    ? "https://ecommerce-backend-silk-theta.vercel.app" 
-    : "http://localhost:3000";
-  
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
+
   const messagesEndRef = useRef(null);
 
-  // Scroll to the latest message whenever messages update
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -33,6 +29,9 @@ function Chatbot() {
     const userMessage = input;
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     setInput("");
+    
+    // 🐛 Improvement: Start loading right before the API call for better timing
+    // It's already here, but keeping it concise.
     setLoading(true);
 
     try {
@@ -42,10 +41,12 @@ function Chatbot() {
         body: JSON.stringify({ message: userMessage }),
       });
       
-      setLoading(false);
+      // 🐛 Improvement: Move setLoading(false) to the 'finally' block
+      // to ensure it runs even if there's an error.
+      // Keeping it here for minimal changes, but the finally block is best.
 
       if (!res.ok) {
-        throw new Error(`Server returned status ${res.status}`);
+        throw new Error(`Server returned status ${res.status} from ${BACKEND_URL}`);
       }
 
       const data = await res.json();
@@ -58,17 +59,20 @@ function Chatbot() {
         ]);
       }
     } catch (error) {
-      setLoading(false);
       console.error("Chatbot API Error:", error);
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: "⚠️ Sorry, I couldn't connect to the backend server. Check the network and CORS configuration." },
       ]);
+    } finally {
+        // ✅ Final state cleanup is guaranteed here
+        setLoading(false);
     }
   };
 
+  // ... (rest of your component rendering logic remains the same)
   return (
-    <AnimatePresence>
+     <AnimatePresence>
       {!open && (
         <motion.button
           key="open-button"
@@ -95,8 +99,8 @@ function Chatbot() {
         >
           <div className="flex justify-between items-center pb-3 border-b mb-3">
             <h2 className="font-bold text-lg text-gray-800 flex items-center">
-                <MessageCircle size={20} className="mr-2 text-[#c586a5]" />
-                Shopping Assistant
+              <MessageCircle size={20} className="mr-2 text-[#c586a5]" />
+              Shopping Assistant
             </h2>
             <button
               onClick={() => setOpen(false)}
@@ -108,9 +112,9 @@ function Chatbot() {
 
           <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
             {messages.length === 0 && (
-                <div className="text-center text-gray-400 mt-10 p-2 text-sm">
-                    Hello! I'm your shopping assistant. How can I help you find the perfect product today?
-                </div>
+              <div className="text-center text-gray-400 mt-10 p-2 text-sm">
+                Hello! I'm your shopping assistant. How can I help you find the perfect product today?
+              </div>
             )}
             {messages.map((msg, i) => (
               <div
@@ -134,11 +138,11 @@ function Chatbot() {
               </div>
             ))}
             {loading && (
-                <div className="flex justify-start">
-                    <span className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl rounded-tl-none text-sm animate-pulse">
-                        Typing...
-                    </span>
-                </div>
+              <div className="flex justify-start">
+                <span className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl rounded-tl-none text-sm animate-pulse">
+                  Typing...
+                </span>
+              </div>
             )}
             <div ref={messagesEndRef} />
           </div>
