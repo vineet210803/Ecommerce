@@ -46,5 +46,4 @@ app.use("/api/chatbot", chatbotRouter);
 // Root route
 app.get("/", (req, res) => res.send("✅ API is working."));
 
-// Start server
-app.listen(port, () => console.log(`✅ Server running on PORT: ${port}`));
+export default app;

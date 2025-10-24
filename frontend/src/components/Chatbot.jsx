@@ -29,9 +29,7 @@ function Chatbot() {
     const userMessage = input;
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     setInput("");
-    
-    // 🐛 Improvement: Start loading right before the API call for better timing
-    // It's already here, but keeping it concise.
+
     setLoading(true);
 
     try {
@@ -40,10 +38,6 @@ function Chatbot() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
       });
-      
-      // 🐛 Improvement: Move setLoading(false) to the 'finally' block
-      // to ensure it runs even if there's an error.
-      // Keeping it here for minimal changes, but the finally block is best.
 
       if (!res.ok) {
         throw new Error(`Server returned status ${res.status} from ${BACKEND_URL}`);
@@ -65,12 +59,10 @@ function Chatbot() {
         { sender: "bot", text: "⚠️ Sorry, I couldn't connect to the backend server. Check the network and CORS configuration." },
       ]);
     } finally {
-        // ✅ Final state cleanup is guaranteed here
         setLoading(false);
     }
   };
 
-  // ... (rest of your component rendering logic remains the same)
   return (
      <AnimatePresence>
       {!open && (

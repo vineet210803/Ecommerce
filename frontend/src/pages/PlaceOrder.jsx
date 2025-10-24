@@ -195,7 +195,7 @@ const PlaceOrder = () => {
           onChange={onChangeHandler}
           name="street"
           value={formData.street}
-          className=" border border-gray-300 py-1.5 px-3.5 w-full "
+          className=" border border-gray-300 py-1.5 px-3.5 w-full"
           type="text"
           placeholder="Street/Area/Location"
         />
